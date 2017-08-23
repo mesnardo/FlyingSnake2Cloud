@@ -1,5 +1,7 @@
 # Deploy Azure cluster with NC nodes as workers
 
+Configuration files adapted from [Azure Quickstart Templates](https://github.com/Azure/azure-quickstart-templates).
+
 ```
 GROUP_NAME=<group-name>
 LOCATION=<a-location>
