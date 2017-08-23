@@ -1,0 +1,30 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "hpcUsername": {
+      "value": "hpc"
+    },
+    "adminUsername": {
+      "value": "mesnardo"
+    },
+    "adminPassword": {
+      "value": "$FlyingSnake24"
+    },
+    "dnsLabelPrefix": {
+      "value": "serpentin"
+    },
+    "masterNodeSize": {
+      "value": "Standard_A8"
+    },
+    "workerNodeSize": {
+      "value": "Standard_NC24r"
+    },
+    "workerNodeCount": {
+      "value": 2
+    },
+    "availabilitySetName": {
+      "value": "avSet"
+    }
+  }
+}
