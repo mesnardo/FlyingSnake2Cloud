@@ -9,8 +9,7 @@ IMAGE="/subscriptions/4c217c02-7b06-42da-b13c-e8de392fbd00/resourceGroups/snaken
 
 az group create \
   --name ${GROUP} \
-  --location ${LOCATION} \
-  --debug
+  --location ${LOCATION}
 
 az storage account create \
   --resource-group ${GROUP} \
@@ -24,8 +23,7 @@ az network public-ip create \
   --name public-ips \
   --dns-name ${DNS_NAME} \
   --location ${LOCATION} \
-  --allocation-method Dynamic \
-  --debug
+  --allocation-method Dynamic
 
 az network vnet create \
   --resource-group ${GROUP} \
@@ -33,9 +31,7 @@ az network vnet create \
   --address-prefixes 10.0.0.0/16 \
   --subnet-name subnetwork \
   --subnet-prefix 10.0.0.0/24 \
-  --location ${LOCATION} \
-  --debug
-
+  --location ${LOCATION}
 
 # Master node
 az network nic create \
@@ -46,7 +42,6 @@ az network nic create \
   --private-ip-address 10.0.0.254 \
   --public-ip-address public-ips \
   --location ${LOCATION}
-  --debug
 
 az vm create \
   --resource-group ${GROUP} \
@@ -58,21 +53,19 @@ az vm create \
   --admin-password "$FlyingSnake24" \
   --authentication-type password \
   --nics nic \
-  --os-disk-caching ReadWrite \
   --os-disk-name osdisk \
-  --storage-sku Standard_LRS \
-  --debug
+  --os-disk-caching ReadWrite \
+  --storage-sku Standard_LRS
 
-az vm unmanaged-disk attach \
+az vm disk attach \
   --resource-group ${GROUP} \
-  --name datadisk0 \
+  --disk datadisk0 \
   --vm-name master \
   --lun 0 \
-  --size-gb 10 \
   --caching ReadWrite \
-  --vhd-uri "http://"${GROUP}"2storage.blob.core.windows.net/vhds/master-datadisk0.vhd" \
-  --new \
-  --debug
+  --size-gb 128 \
+  --sku Standard_LRS \
+  --new
 
 # Worker0 node
 az network nic create \
@@ -80,17 +73,50 @@ az network nic create \
   --name nic-worker0 \
   --vnet-name virtualnetwork \
   --subnet subnetwork \
-  --debug
+  --private-ip-address 10.0.0.5 \
+  --location ${LOCATION}
 
 az vm create \
   --resource-group ${GROUP} \
   --name worker0 \
   --location ${LOCATION} \
-  --size ${VM_SIZE} \
+  --size ${WORKER_VM_SIZE} \
   --image ${IMAGE} \
   --admin-username mesnardo \
   --admin-password "$FlyingSnake24" \
   --authentication-type password \
   --nics nic-worker0 \
-  --storage-sku Standard_LRS \
-  --debug
+  --os-disk-name osdisk-worker0 \
+  --os-disk-caching ReadWrite \
+  --storage-sku Standard_LRS
+
+az vm extension set \
+  --resource-group ${GROUP} \
+  --vm-name master \
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0 \
+  --name CustomScript \
+  --settings postinstall.json
+
+# Worker1 node
+az network nic create \
+  --resource-group ${GROUP} \
+  --name nic-worker1 \
+  --vnet-name virtualnetwork \
+  --subnet subnetwork \
+  --private-ip-address 10.0.0.6 \
+  --location ${LOCATION}
+
+az vm create \
+  --resource-group ${GROUP} \
+  --name worker1 \
+  --location ${LOCATION} \
+  --size ${WORKER_VM_SIZE} \
+  --image ${IMAGE} \
+  --admin-username mesnardo \
+  --admin-password "$FlyingSnake24" \
+  --authentication-type password \
+  --nics nic-worker1 \
+  --os-disk-name osdisk-worker1 \
+  --os-disk-caching ReadWrite \
+  --storage-sku Standard_LRS

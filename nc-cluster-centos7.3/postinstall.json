@@ -1,0 +1,4 @@
+{
+  "fileUris": ["https://raw.githubusercontent.com/mesnardo/FlyingSnake2Cloud/master/nc-cluster-centos7.3/postinstall.sh"],
+  "commandToExecute": "bash postinstall.sh master worker 2 hpc"
+}
