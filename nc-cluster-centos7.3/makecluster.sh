@@ -67,6 +67,14 @@ az vm disk attach \
   --sku Standard_LRS \
   --new
 
+az vm extension set \
+  --resource-group ${GROUP} \
+  --vm-name master \
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0 \
+  --name CustomScript \
+  --settings postinstall.json
+
 # Worker0 node
 az network nic create \
   --resource-group ${GROUP} \
@@ -92,7 +100,7 @@ az vm create \
 
 az vm extension set \
   --resource-group ${GROUP} \
-  --vm-name master \
+  --vm-name worker0 \
   --publisher Microsoft.Azure.Extensions \
   --version 2.0 \
   --name CustomScript \
@@ -120,3 +128,11 @@ az vm create \
   --os-disk-name osdisk-worker1 \
   --os-disk-caching ReadWrite \
   --storage-sku Standard_LRS
+
+az vm extension set \
+  --resource-group ${GROUP} \
+  --vm-name worker1 \
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0 \
+  --name CustomScript \
+  --settings postinstall.json
