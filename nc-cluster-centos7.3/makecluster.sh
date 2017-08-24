@@ -58,6 +58,8 @@ az vm create \
   --admin-password "$FlyingSnake24" \
   --authentication-type password \
   --nics nic \
+  --os-disk-caching ReadWrite \
+  --os-disk-name osdisk \
   --storage-sku Standard_LRS \
   --debug
 
