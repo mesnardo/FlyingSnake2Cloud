@@ -9,10 +9,10 @@
       "value": "mesnardo"
     },
     "adminPassword": {
-      "value": "$FlyingSnake24"
+      "value": ""
     },
     "dnsLabelPrefix": {
-      "value": "serpentin"
+      "value": "serpent"
     },
     "masterNodeSize": {
       "value": "Standard_A8"
@@ -22,9 +22,6 @@
     },
     "workerNodeCount": {
       "value": 2
-    },
-    "availabilitySetName": {
-      "value": "avSet"
     }
   }
 }
