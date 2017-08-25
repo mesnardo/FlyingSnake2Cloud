@@ -6,7 +6,6 @@ DNS_NAME="serpent"
 MASTER_VM_SIZE="Standard_A8"
 WORKER_VM_SIZE="Standard_NC24r"
 IMAGE="/subscriptions/4c217c02-7b06-42da-b13c-e8de392fbd00/resourceGroups/snakenc24-test/providers/Microsoft.Compute/images/snake-image"
-IMAGE="OpenLogic:CentOS-HPC:7.3:7.3.20170606"
 
 echo "[INFO] Creating resource group ..."
 az group create \
@@ -67,14 +66,13 @@ az vm disk attach \
   --sku Standard_LRS \
   --new
 
-echo "[INFO] Master: Performing post-installation steps ..."
-az vm extension set \
+echo "[INFO] Creating availability set ..."
+az vm availability-set create \
   --resource-group ${GROUP} \
-  --vm-name master \
-  --publisher Microsoft.Azure.Extensions \
-  --version 2.0 \
-  --name CustomScript \
-  --settings postinstall.json
+  --name avset \
+  --location ${LOCATION} \
+  --platform-fault-domain-count 2 \
+  --platform-update-domain-count 2
 
 # Worker0 node
 echo "[INFO] Worker0: Creating network interface ..."
@@ -97,18 +95,10 @@ az vm create \
   --admin-password "$FlyingSnake24" \
   --authentication-type password \
   --nics nic-worker0 \
+  --availability-set avset \
   --os-disk-name osdisk-worker0 \
   --os-disk-caching ReadWrite \
   --storage-sku Standard_LRS
-
-echo "[INFO] Worker0: Performing post-installation steps ..."
-az vm extension set \
-  --resource-group ${GROUP} \
-  --vm-name worker0 \
-  --publisher Microsoft.Azure.Extensions \
-  --version 2.0 \
-  --name CustomScript \
-  --settings postinstall.json
 
 # Worker1 node
 echo "[INFO] Worker1: Creating network interface ..."
@@ -131,9 +121,29 @@ az vm create \
   --admin-password "$FlyingSnake24" \
   --authentication-type password \
   --nics nic-worker1 \
+  --availability-set avset \
   --os-disk-name osdisk-worker1 \
   --os-disk-caching ReadWrite \
   --storage-sku Standard_LRS
+
+# Post-installation steps
+echo "[INFO] Master: Performing post-installation steps ..."
+az vm extension set \
+  --resource-group ${GROUP} \
+  --vm-name master \
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0 \
+  --name CustomScript \
+  --settings postinstall.json
+
+echo "[INFO] Worker0: Performing post-installation steps ..."
+az vm extension set \
+  --resource-group ${GROUP} \
+  --vm-name worker0 \
+  --publisher Microsoft.Azure.Extensions \
+  --version 2.0 \
+  --name CustomScript \
+  --settings postinstall.json
 
 echo "[INFO] Worker1: Performing post-installation steps ..."
 az vm extension set \
