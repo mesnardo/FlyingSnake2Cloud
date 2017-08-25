@@ -6,18 +6,14 @@ DNS_NAME="serpent"
 MASTER_VM_SIZE="Standard_A8"
 WORKER_VM_SIZE="Standard_NC24r"
 IMAGE="/subscriptions/4c217c02-7b06-42da-b13c-e8de392fbd00/resourceGroups/snakenc24-test/providers/Microsoft.Compute/images/snake-image"
+IMAGE="OpenLogic:CentOS-HPC:7.3:7.3.20170606"
 
+echo "[INFO] Creating resource group ..."
 az group create \
   --name ${GROUP} \
   --location ${LOCATION}
 
-az storage account create \
-  --resource-group ${GROUP} \
-  --name ${GROUP}2storage \
-  --location ${LOCATION} \
-  --sku Standard_LRS \
-  --kind storage
-
+echo "[INFO] Creating public ip ..."
 az network public-ip create \
   --resource-group ${GROUP} \
   --name public-ips \
@@ -25,6 +21,7 @@ az network public-ip create \
   --location ${LOCATION} \
   --allocation-method Dynamic
 
+echo "[INFO] Creating virtual network and subnet ..."
 az network vnet create \
   --resource-group ${GROUP} \
   --name virtualnetwork  \
@@ -34,6 +31,7 @@ az network vnet create \
   --location ${LOCATION}
 
 # Master node
+echo "[INFO] Master: Creating network interface ..."
 az network nic create \
   --resource-group ${GROUP} \
   --name nic \
@@ -43,6 +41,7 @@ az network nic create \
   --public-ip-address public-ips \
   --location ${LOCATION}
 
+echo "[INFO] Master: Creating virtual machine ..."
 az vm create \
   --resource-group ${GROUP} \
   --name master \
@@ -57,6 +56,7 @@ az vm create \
   --os-disk-caching ReadWrite \
   --storage-sku Standard_LRS
 
+echo "[INFO] Master: Attaching data disk ..."
 az vm disk attach \
   --resource-group ${GROUP} \
   --disk datadisk0 \
@@ -67,6 +67,7 @@ az vm disk attach \
   --sku Standard_LRS \
   --new
 
+echo "[INFO] Master: Performing post-installation steps ..."
 az vm extension set \
   --resource-group ${GROUP} \
   --vm-name master \
@@ -76,6 +77,7 @@ az vm extension set \
   --settings postinstall.json
 
 # Worker0 node
+echo "[INFO] Worker0: Creating network interface ..."
 az network nic create \
   --resource-group ${GROUP} \
   --name nic-worker0 \
@@ -84,6 +86,7 @@ az network nic create \
   --private-ip-address 10.0.0.5 \
   --location ${LOCATION}
 
+echo "[INFO] Worker0: Creating virtual machine ..."
 az vm create \
   --resource-group ${GROUP} \
   --name worker0 \
@@ -98,6 +101,7 @@ az vm create \
   --os-disk-caching ReadWrite \
   --storage-sku Standard_LRS
 
+echo "[INFO] Worker0: Performing post-installation steps ..."
 az vm extension set \
   --resource-group ${GROUP} \
   --vm-name worker0 \
@@ -107,6 +111,7 @@ az vm extension set \
   --settings postinstall.json
 
 # Worker1 node
+echo "[INFO] Worker1: Creating network interface ..."
 az network nic create \
   --resource-group ${GROUP} \
   --name nic-worker1 \
@@ -115,6 +120,7 @@ az network nic create \
   --private-ip-address 10.0.0.6 \
   --location ${LOCATION}
 
+echo "[INFO] Worker1: Creating virtual machine ..."
 az vm create \
   --resource-group ${GROUP} \
   --name worker1 \
@@ -129,6 +135,7 @@ az vm create \
   --os-disk-caching ReadWrite \
   --storage-sku Standard_LRS
 
+echo "[INFO] Worker1: Performing post-installation steps ..."
 az vm extension set \
   --resource-group ${GROUP} \
   --vm-name worker1 \
@@ -136,3 +143,5 @@ az vm extension set \
   --version 2.0 \
   --name CustomScript \
   --settings postinstall.json
+
+echo "[INFO] Done!"
