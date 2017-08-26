@@ -13,12 +13,16 @@ yum install -y wget git gcc gcc-c++ gcc-gfortran make cmake flex bison
 cd /tmp
 tar -xzf l_mpi_2017.2.174.tgz
 cd l_mpi_2017.2.174
-./install.sh -s ../intel-install-silent.cfg
+sed -i -e 's/^ACCEPT_EULA=decline/ACCEPT_EULA=accept/g' silent.cfg
+sed -i -e 's/^ARCH_SELECTED=ALL/ARCH_SELECTED=INTEL64/g' silent.cfg
+./install.sh -s silent.cfg
 cd ..
 rm -rf l_mpi_2017.2.174 l_mpi_2017.2.174.tgz
 tar -xzf l_mkl_2017.2.174.tgz
 cd l_mkl_2017.2.174
-./install.sh -s ../intel-install-silent.cfg
+sed -i -e 's/^ACCEPT_EULA=decline/ACCEPT_EULA=accept/g' silent.cfg
+sed -i -e 's/^ARCH_SELECTED=ALL/ARCH_SELECTED=INTEL64/g' silent.cfg
+./install.sh -s silent.cfg
 cd ..
 rm -rf l_mkl_2017.2.174 l_mkl_2017.2.174.tgz
 
