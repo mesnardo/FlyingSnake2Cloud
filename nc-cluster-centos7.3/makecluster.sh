@@ -5,7 +5,9 @@ LOCATION="southcentralus"
 DNS_NAME="serpent"
 MASTER_VM_SIZE="Standard_A8"
 WORKER_VM_SIZE="Standard_NC24r"
-IMAGE="/subscriptions/4c217c02-7b06-42da-b13c-e8de392fbd00/resourceGroups/snakenc24-test/providers/Microsoft.Compute/images/snake-image"
+IMAGE="/subscriptions/4c217c02-7b06-42da-b13c-e8de392fbd00/resourceGroups/petibm-GPU-IntelMPI/providers/Microsoft.Compute/images/petibm-image"
+ADMIN_USERNAME=$1
+ADMIN_PASSWORD=$2
 
 echo "[INFO] Creating resource group ..."
 az group create \
@@ -47,8 +49,8 @@ az vm create \
   --location ${LOCATION} \
   --size ${MASTER_VM_SIZE} \
   --image ${IMAGE} \
-  --admin-username mesnardo \
-  --admin-password "$FlyingSnake24" \
+  --admin-username ${ADMIN_USERNAME} \
+  --admin-password ${ADMIN_PASSWORD} \
   --authentication-type password \
   --nics nic \
   --os-disk-name osdisk \
@@ -91,8 +93,8 @@ az vm create \
   --location ${LOCATION} \
   --size ${WORKER_VM_SIZE} \
   --image ${IMAGE} \
-  --admin-username mesnardo \
-  --admin-password "$FlyingSnake24" \
+  --admin-username ${ADMIN_USERNAME} \
+  --admin-password ${ADMIN_PASSWORD} \
   --authentication-type password \
   --nics nic-worker0 \
   --availability-set avset \
@@ -117,8 +119,8 @@ az vm create \
   --location ${LOCATION} \
   --size ${WORKER_VM_SIZE} \
   --image ${IMAGE} \
-  --admin-username mesnardo \
-  --admin-password "$FlyingSnake24" \
+  --admin-username ${ADMIN_USERNAME} \
+  --admin-password ${ADMIN_PASSWORD} \
   --authentication-type password \
   --nics nic-worker1 \
   --availability-set avset \
