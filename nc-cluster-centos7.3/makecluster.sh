@@ -6,6 +6,7 @@ DNS_NAME="serpent"
 MASTER_VM_SIZE="Standard_A8"
 WORKER_VM_SIZE="Standard_NC24r"
 IMAGE="/subscriptions/4c217c02-7b06-42da-b13c-e8de392fbd00/resourceGroups/petibm-GPU-IntelMPI/providers/Microsoft.Compute/images/petibm-image"
+IMAGE="/subscriptions/4c217c02-7b06-42da-b13c-e8de392fbd00/resourceGroups/test/providers/Microsoft.Compute/images/test-image"
 ADMIN_USERNAME=$1
 ADMIN_PASSWORD=$2
 
