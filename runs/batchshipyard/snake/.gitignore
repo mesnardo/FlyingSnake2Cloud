@@ -7,8 +7,10 @@ iterationCounts.txt
 
 # Ignore logging files
 stdout.txt
+stderr.txt
 *.log
 .logamgx
+*shipyard.envlist
 
 # Ignore folders with figures
 figures
