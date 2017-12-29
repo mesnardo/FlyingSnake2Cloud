@@ -15,3 +15,6 @@ stderr.txt
 
 # Ignore folders with figures
 figures
+
+# Ignore fail runs
+*fail
