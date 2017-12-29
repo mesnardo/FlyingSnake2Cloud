@@ -22,16 +22,18 @@ parser.add_argument('--np', '-np', dest='np',
 args = parser.parse_args()
 
 script_dir = os.path.dirname(os.path.realpath(__file__))
-data_dir = os.sep.join(script_dir.split(os.sep)[:-1])
-out_dir = os.path.join(data_dir, 'postprocessing')
+simu_dir = os.sep.join(script_dir.split(os.sep)[:-1])
+data_dir = os.path.join(simu_dir, 'postprocessing')
+grid_dir = os.path.join(simu_dir, 'grids')
+out_dir = data_dir
 if not os.path.isdir(out_dir):
   os.makedirs(out_dir)
 
 nx, ny, nz = 1704, 1706, 80
 nstart, nend, nstep = 249600, 281600, 3200
-args2 = ('-directory {} -output_directory {} '
+args2 = ('-directory {} -output_directory {} -grid_directory {} '
          '-nstart {} -nend {} -nstep {} -nx {} -ny {} -nz {} '
          '-periodic_z true -compute_wx true -log_view -options_left'
-         .format(data_dir, out_dir, nstart, nend, nstep, nx, ny, nz))
+         .format(data_dir, out_dir, grid_dir, nstart, nend, nstep, nx, ny, nz))
 subprocess.call('mpiexec -np {} petibm-vorticity3d {}'.format(args.np, args2),
                 shell=True)
