@@ -1,0 +1,12 @@
+# Ignore numerical solution
+forces.txt
+grid.txt
+grids
+iterationCounts.txt
+
+# Ignore logging files
+stdout.txt
+*.log
+
+# Ignore folders with figures
+**/figures
