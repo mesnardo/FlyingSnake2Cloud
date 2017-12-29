@@ -1,0 +1,23 @@
+{
+    "job_specifications": [
+        {
+            "id": "osujob",
+            "auto_complete": true,
+            "tasks": [
+                {
+                    "image": "mesnardo/osubenchmarks:5.3.2-GPU-IntelMPI",
+                    "remove_container_after_exit": true,
+                    "command": "/fileshare/osubenchmarks/run-osu.sh /fileshare/osubenchmarks",
+                    "shared_data_volumes": [
+                        "shipyardvol"
+                    ],
+                    "multi_instance": {
+                        "num_instances": "pool_current_dedicated"
+                    },
+                    "gpu": true,
+                    "infiniband": true
+                }
+            ]
+        }
+    ]
+}
