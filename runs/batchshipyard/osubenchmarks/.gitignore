@@ -1,0 +1,5 @@
+# Ignore logging files with results
+*.log
+
+# Ignore folder with figures
+figures
