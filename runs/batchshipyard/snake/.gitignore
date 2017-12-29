@@ -1,4 +1,5 @@
 # Ignore numerical solution
+0*
 forces.txt
 grid.txt
 grids
@@ -7,6 +8,7 @@ iterationCounts.txt
 # Ignore logging files
 stdout.txt
 *.log
+.logamgx
 
 # Ignore folders with figures
-**/figures
+figures
