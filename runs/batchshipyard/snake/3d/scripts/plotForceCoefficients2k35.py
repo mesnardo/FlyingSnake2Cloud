@@ -46,18 +46,37 @@ filepath = os.path.join(root_dir, '2k35-meshB', 'forces.txt')
 meshB = read_forces(filepath)
 # Apply time-correction due to change in time-step size
 meshB['times'] += time_correction
+# Re-define time values because of PetIBM 6-digit precision
+dt = 5.0E-04
+tstart, tend = meshB['times'][0], meshB['times'][-1]
+meshB['times'] = numpy.linspace(tstart, tend, meshB['fx'].size)
+tstart, tend, dt = meshB['times'][0], meshB['times'][-1], 5.0E-04
+print(meshB['times'][0], meshB['times'][-1])
+assert meshB['times'].size == meshB['fx'].size
 
 # Read forces from simulation on fine mesh (restart)
 filepath = os.path.join(root_dir, '2k35-meshB-restart1', 'forces.txt')
 meshB1 = read_forces(filepath)
 # Apply time-correction due to change in time-step size
 meshB1['times'] += time_correction
+# Re-define time values because of PetIBM 6-digit precision
+dt = 5.0E-04
+tstart, tend = meshB1['times'][0], meshB1['times'][-1] + dt
+meshB1['times'] = numpy.linspace(tstart, tend, meshB1['fx'].size)
+print(meshB1['times'][0], meshB1['times'][-1])
+assert meshB1['times'].size == meshB1['fx'].size
 
 # Read forces from simulation on fine mesh (second restart)
 filepath = os.path.join(root_dir, '2k35-meshB-restart2', 'forces.txt')
 meshB2 = read_forces(filepath)
 # Apply time-correction due to change in time-step size
 meshB2['times'] += time_correction
+# Re-define time values because of PetIBM 6-digit precision
+dt = 5.0E-04
+tstart, tend = meshB2['times'][0] + dt, meshB2['times'][-1] + dt
+meshB2['times'] = numpy.linspace(tstart, tend, meshB2['fx'].size)
+print(meshB2['times'][0], meshB2['times'][-1])
+assert meshB2['times'].size == meshB2['fx'].size
 
 # Concatenate results from all 3D runs
 all3d = {}
