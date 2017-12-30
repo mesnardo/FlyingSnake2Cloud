@@ -13,6 +13,9 @@ stderr.txt
 *logamgx
 *shipyard.envlist
 
+# Ignore post-processing output
+postprocessing
+
 # Ignore folders with figures
 figures
 
