@@ -51,7 +51,6 @@ dt = 5.0E-04
 tstart, tend = meshB['times'][0], meshB['times'][-1]
 meshB['times'] = numpy.linspace(tstart, tend, meshB['fx'].size)
 tstart, tend, dt = meshB['times'][0], meshB['times'][-1], 5.0E-04
-print(meshB['times'][0], meshB['times'][-1])
 assert meshB['times'].size == meshB['fx'].size
 
 # Read forces from simulation on fine mesh (restart)
@@ -63,7 +62,6 @@ meshB1['times'] += time_correction
 dt = 5.0E-04
 tstart, tend = meshB1['times'][0], meshB1['times'][-1] + dt
 meshB1['times'] = numpy.linspace(tstart, tend, meshB1['fx'].size)
-print(meshB1['times'][0], meshB1['times'][-1])
 assert meshB1['times'].size == meshB1['fx'].size
 
 # Read forces from simulation on fine mesh (second restart)
@@ -75,7 +73,6 @@ meshB2['times'] += time_correction
 dt = 5.0E-04
 tstart, tend = meshB2['times'][0] + dt, meshB2['times'][-1] + dt
 meshB2['times'] = numpy.linspace(tstart, tend, meshB2['fx'].size)
-print(meshB2['times'][0], meshB2['times'][-1])
 assert meshB2['times'].size == meshB2['fx'].size
 
 # Concatenate results from all 3D runs
