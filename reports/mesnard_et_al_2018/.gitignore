@@ -8,3 +8,6 @@
 *.out
 *.pdf
 *.synctex.gz
+
+# Ignore PNG files
+*.png
