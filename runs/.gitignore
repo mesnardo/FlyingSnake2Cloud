@@ -1,2 +1,28 @@
+# Ignore pre-processed data
+*.body
+
+# Ignore PetIBM numerical solution
+0*
+forces.txt
+grids
+grid.txt
+iterationCounts.txt
+.logamgx
+
+# Ignore output from scaling tests
+output-*.txt
+
+# Ignore output from Poisson scaling tests
+azure-A9cluster/poisson/uniform/run1
+azure-A9cluster/poisson/uniform/run2
+azure-A9cluster/poisson/uniform/run3
+azure-A9cluster/poisson/uniform/run4
+azure-A9cluster/poisson/uniform/run5
+
+# Ignore log files
+*.log
+*.out
+*.err
+
 # Ignore PNG files
 *.png
