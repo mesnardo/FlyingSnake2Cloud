@@ -43,7 +43,7 @@ cases['Colonial One']['max'] = runtimes.max(axis=0)
 
 # Read runtimes from Azure A9 runs
 common_dir = os.path.join(root_dir, 'azure-A9cluster',
-                          'poisson', 'uniform2')
+                          'poisson', 'uniform')
 folders = ['run1', 'run2', 'run3', 'run4', 'run5']
 cases['Azure A9'] = {}
 runtimes = numpy.empty((len(folders), max_nodes), dtype=numpy.float64)
