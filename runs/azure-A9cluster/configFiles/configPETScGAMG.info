@@ -1,0 +1,10 @@
+-ksp_type cg
+-ksp_initial_guess_nonzero true
+-ksp_rtol 0.0
+-ksp_atol 1.0E-06
+-ksp_max_it 1000
+
+-pc_type gamg
+-pc_gamg_type agg
+-pc_gamg_agg_nsmooths 1
+-pc_gamg_threshold 0.0
