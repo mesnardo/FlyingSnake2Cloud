@@ -1,0 +1,5 @@
+# bodies.yaml
+
+- type: points
+  pointsFile: snakeAoA35.body
+
