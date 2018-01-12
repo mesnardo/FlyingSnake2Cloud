@@ -26,7 +26,8 @@
 
 \author[1]{Olivier Mesnard}
 \author[1]{Lorena A. Barba}
-\affil[1]{Mechanical and Aerospace Engineering, The George Washington University, \\
+\affil[1]{Department of Mechanical and Aerospace Engineering,
+The George Washington University,
 Washington, DC, 20052, United-States}
 \maketitle
 
@@ -73,13 +74,15 @@ With the Microsoft Azure Sponsorship program, we obtained a credit of 20000 USD 
 We used instances of the NC-series, that features Nvidia K80 GPU devices, to perform direct numerical simulations of the three-dimensional flow around a cylinder with an anatomically accurate cross-section of the gliding snake.
 
 
-\section{Simulation Setup}
+\section{Simulations Setup}
 
-We use our in-house software \petibm (version 0.2) to perform direct numerical simulations of the three-dimensional flow in the domain $30c \times 30c \times 3.2c$ where $c$ is the chord length of the snake cross-section of the cylinder that is centered in the $x$-$y$ plane.
+\subsection{Numerical Method}
+
+We use our in-house software \petibm (version 0.2) to perform direct numerical simulations of the three-dimensional flow in the domain $30c \times 30c \times 3.2c$, where $c$ is the chord length of the snake cross-section of the cylinder centered in the $x$-$y$ plane.
 \petibm implements the decoupled IBPM from \cite{Li_et_al_2016} with a fully discrete formulation for the velocity fluxes, the pressure field, and the Lagrangian forces.
 The immersed boundary is discretize with the same resolution than the Eulerian mesh on which the Navier-Stokes equations are solved.
 We use a structured Cartesian mesh to discretize the domain.
-The mesh is uniform in the sub-domain $\left[-0.52c, 3.48c\right]\times\left[2c, 2c\right]\times\left[0, 3.2c\right]\times$, which contains the immersed boundary, and stretched to the external boundaries with a constant stretching ratio of $1.01$ in all directions.
+The mesh is uniform in the sub-domain $\left[-0.52c, 3.48c\right]\times\left[2c, 2c\right]\times\left[0, 3.2c\right]$, which contains the immersed boundary, and stretched to the external boundaries with a constant stretching ratio of $1.01$ in all directions.
 The snake cylinder is discretized with the same resolution than the background Eulerian mesh on which the Navier-Stokes equations are solved.
 We performed simulations on two different meshes.
 A ``coarse'' mesh with $1071\times1072\times40$ cells with a grid-width of $0.008c$ in the $x$ and $y$ directions and a grid-width of $0.08c$ in the $z$ direction.
@@ -103,6 +106,19 @@ The Poisson system is solved on multiple GPU devices with the Nvidia \amgx libra
 The exit criterion for the solver is also based on an absolute tolerance of $10^{-6}$ for the residuals.
 We use \amgxwrapper, an open-source interface between \petsc and \amgx to handle the data transfers between the CPUs and the GPU devices.
 
+
+\subsection{Microsoft Azure}
+
+We used the public cloud platform Microsoft Azure to run simulations of the three-dimensional flow around the snake cylinder.
+As mentioned earlier, we solve the Poisson system iteratively on multiple GPU devices.
+Thus, increasing the mesh grid requires more memory on device.
+Our University cluster, Colonial One, possesses nodes with CUDA-capable GPU devices (2 K20 devices per node).
+For the simulation on the finest grid (233 million cells), we estimated we would need at least 24 nodes on Colonial One to satisfy the memory requirements for solving the Poisson system.
+For sure, we would have to wait a considerable amount of time in the queue before the job starts.
+Moreover, the runtime of those simulations would have had easily exceeded the the 7-day time limit imposed by the cluster.
+Looking for an alternative to run our "big" simulations, we considered public clouds.
+In 2016, we obtained a Microsoft Azure Sponsorship for a credit of $20,000$ to evaluate their platform and run our MPI-based application, PetIBM, to study the three-dimensional flow around a cylinder with an anatomically accurate cross-section of the flying snake.
+
 We started by computing 100 time units of flow simulation on the coarse from a flow initially set to the freestream flow.
 The simulation ran on one instance NC24 (24 CPU cores and 4 Nvidia K80 GPU devices).
 From there, the numerical solution was interpolated on the fine mesh and we ran the simulation for 90 additional time units using 4 NC24r instances using 24 processes and 4 Nvidia K80 GPU devices per node and taking advantage of the low-latency InfiniBand network.
@@ -117,6 +133,27 @@ At the time of writing, \amgx is now an open-source project hosted on GitHub\foo
 
 The simulation on the fine mesh as well as the two additional simulations on the coarse mesh ran on NC24r instances in the East US region using Azure Batch service and Batch Shipyard.
 For those runs, we used CentOS-7 base image with \petibm-0.2, \petsc-3.7.4, Intel MPI, \cuda-8.0 ,and \amgx-2.0 (source code provided by Nvidia under NDA so we could build the library with Intel MPI).
+
+Azure Batch is a platform service for running HPC applications in the cloud that relieves the user from manually creating, configuring, and managing a HPC cluster, virtual machines, virtual networks, job and task scheduling infrastructure.
+The user creates a pool in a Batch account, a job to run the workload on the pool, and add tasks to the job.
+Batch service automatically schedules the tasks for execution on the compute nodes present in the pool.
+Each task uses the application uploaded to process the input files present on a Azure Storage account.
+(Note that a Batch account comes with a default limit of dedicated cores and to run applications on a larger number, the user needs to contact the Azure support team to increase the quota.)
+With Batch service, you can even configure the pool to run tasks in Docker containers.
+(The container images are copied to the VMs when the pool is created.)
+Running applications in Docker containers removes the constraint from the user in dealing with software dependencies on the cloud.
+For our PetIBM application, we built the container on our local machine using Nvidia Docker, uploaded the image to DockerHub in private registry, and ran our simulation tasks in containers with Batch service.
+
+To make our workflow with Batch service easier, we also used Batch Shipyard, an open-source software, hosted on GitHub, mainly developed by Microsoft Azure, to help us provision and execute container-based tasks on Azure Batch compute nodes.
+With a few configuration files and a few command lines in the terminal, Batch Shipyard creates a pool of compute nodes, submit a job with Azure Batch, and run multiple tasks with Azure Batch service.
+With Batch Shipyard, the user does not have to master the Batch .NET SDK to create a pool of compute nodes that supports running container-based tasks.
+The process of using the Batch .NET SDK for such task is extensively documented on the official Microsoft Azure documentation; however, the learning curve is definitely steeper and longer than when adopting Batch Shipyard.
+With Batch Shipyard, we have been able to run container-based multi-instance tasks for our PetIBM simulations on the NC24r instances (featuring Nvidia K80 GPU devices) with Azure Linux VMs and over the low-latency and high-bandwidth Infiniband/RDMA network.
+As mentioned at the end of the documentation for Batch Shipyard, only Intel MPI can be used in conjunction with Infiniband/RDMA on Azure Linux VMs; this is a current limitation of the underlying VM and host drivers.
+At that time, Nvidia AmgX was not yet an open-source project hosted GitHub and the shared library, provided with a limited free-to-use license to CUDA-registered developers, was built with OpenMPI.
+Understanding our problem, folks at Nvidia gave us access to the source code under a non-disclosure agreement so we could build the library with Intel MPI.
+This is the only reason why the Docker image with PetIBM and its dependencies was made private on DockerHub.
+Finally, we used Microsoft Azure CLI 2.0 to transfer data between our local machine and an Azure Storage account.
 
 
 \section{Results}
@@ -149,9 +186,23 @@ These results confirms that we are able to get similar performances on a public 
 \subsection{Flying Snake to the Cloud}
 
 
-\section{Conclusion}
+\section{Discussion}
 
-To be added.
+Not everything went smooth when run our task with Azure Batch service.
+The simulation of the 3D flow around the snake cylinder on a mesh with 233 million cells is a long run that was estimated to complete in about 3 weeks.
+However, 10 days after the run was submitted with Batch Shipyard to Azure Batch (a job was submitted in a pool of 4 NC24r nodes using 24 CPU processes and 4 K80 GPU devices per node), we noticed something went wrong: the numerical solution was not anymore written into files (we output the aerodynamic forces at every time step of the simulation) and the nodes were tagged as "IDLE" on the Microsoft Azure portal while the Batch pool and the job's task were still respectively marked as "active" and "running".
+(Logging into one of the compute nodes, we saw that the processes were still running.)
+Fred Park, software engineer at Microsoft, told us that Batch tasks have a 7-day time limit enforced (from the moment tasks are submitted), a restriction that, at the time of submission had not yet been added to the official Azure Batch documentation and was unknown to us.
+However, it is mentioned in the "General Limitations and Restrictions" at the end of the Batch Shipyard documentation and we did not see it.
+Still, this is not the first time that a user is not reading thoroughly the entire documentation when approaching a software.
+But in the end, we did not get any notification about our job being killed when it exceeded 7 days of runtime.
+In the end, it took us (the users) almost three days to realize that something went wrong and that we needed to kill the job and restart the simulation (from the last time-step solution saved): a time lapse that cost us about $1,800$ on our Microsoft Azure Sponsorship.
+
+In the process of developing and running PetIBM simulations on Microsoft Azure, we have to admit that our open-source and reproducibility standards took a hit.
+We used a private registry to push our PetIBM image on DockerHub because it contains the source code of Nvidia AmgX, which was not open-source at that point.
+The private image was used to run the simulations in a Docker container with Azure Batch service and Batch Shipyard.
+In addition to that, the long simulation runtimes (about three weeks for the simulation of the finest mesh) are expensive, making it more difficult for other to reproduce the results.
+At least, we took the precaution to make public all configuration files, pre- and post-processing scripts on GitHub where we also detail the workflow used.
 
 \bibliography{references}
 
