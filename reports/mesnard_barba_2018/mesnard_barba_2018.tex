@@ -185,6 +185,35 @@ These results confirms that we are able to get similar performances on a public 
 
 \subsection{Flying Snake to the Cloud}
 
+We computed $100$ non-dimensional time units of flow simulation ($100000$ time steps) on the coarse mesh at Reynolds number $2000$ and angle of attack $35^o$.
+From there, we interpolated the final numerical solution onto the fine mesh and restarted time simulation.
+The simulation ran for an additional $98614$ time steps (time $149.307$), at which point the simulation was no longer running because of the 7-day time limit enforced on Batch tasks; so, we killed it.
+The simulation on the finer mesh was restarted from time $147.6$ and run until time $175.2$.
+Finally, it was restarted one last time $174.8$ until time $190.8$.
+
+The drag and Lift coefficients are defined as
+
+\begin{equation}
+	C_D = \frac{F_x}{\frac{1}{2} \rho U_\infty^2 c L_z},\quad C_L = \frac{F_y}{\frac{1}{2} \rho U_\infty^2 c L_z}
+\end{equation}
+
+\noindent where $F_x$ and $F_y$ are the total forces in the streamwise and cross-flow directions, respectively, $c$ is the chord length of the snake cross-section, and $L_z$ is the spanwise length.
+
+Figure \ref{force_coefficients_3d2k35_azure} shows the instantaneous force coefficients obtained on the 3D snake cylinder.
+We add previous 2D results obtained with the same code (and with a similar mesh resolution) for comparison.
+During the initial transient period, the 2D and 3D forces are similar as the 3D structures are not yet present in the flow.
+After that, the aerodynamic force coefficients acting on the 3D cylinder are smaller than those obtained with a 2D snake profile.
+\cite{Krishnan_et_al_2014} chose to average the force coefficients between $32$ and $64$ time units of flow simulation.
+Doing the same for the 2D results, we obtain a mean drag coefficient of $1.22$ and a mean lift coefficient of $1.95$.
+For the 3D runs, we decided to average the forces coefficients between $50$ and $150$ time units.
+Compared to the 2D results, the mean drag coefficient is relatively $32.7\%$ smaller ($0.82$) and the mean lift coefficient is relatively $20.4$ smaller.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=12cm]{figures/forceCoefficients3d2k35.png}
+\caption{Drag coefficient (top) and lift coefficient (bottom) obtained on the coarse and fine meshes for the three-dimensional simulations at Reynolds number $2000$ and angle of attack $35^o$. Previously obtained force coefficients for the two-dimensional simulation are added for comparison.}
+\label{force_coefficients_3d2k35_azure}
+\end{figure}
 
 \section{Discussion}
 
