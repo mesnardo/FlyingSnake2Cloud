@@ -38,13 +38,13 @@ spanwise_length = 3.2
 time_correction = 0.0
 
 # Read forces from simulation on coarse mesh
-filepath = os.path.join(root_dir, '1k35-meshA', 'forces.txt')
+filepath = os.path.join(root_dir, '2k30-meshA', 'forces.txt')
 meshA = read_forces(filepath)
 
 
 # Read forces from 2D simulation
 filepath = os.path.join(os.environ['AZ_SNAKE'], 'runs', 'batchshipyard',
-                        'snake', 'data', 'forces-2d-1k35.txt')
+                        'snake', 'data', 'forces-2d-2k30.txt')
 mesh2d = read_forces(filepath)
 
 # Compute mean force coefficients
@@ -87,5 +87,5 @@ fig.tight_layout()
 figures_dir = os.path.join(root_dir, 'figures')
 if not os.path.isdir(figures_dir):
   os.makedirs(figures_dir)
-filepath = os.path.join(figures_dir, 'forceCoefficients1k35.png')
+filepath = os.path.join(figures_dir, 'forceCoefficients3d2k30.png')
 fig.savefig(filepath, dpi=300, format='png')

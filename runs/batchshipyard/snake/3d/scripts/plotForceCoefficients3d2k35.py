@@ -139,5 +139,5 @@ fig.tight_layout()
 figures_dir = os.path.join(root_dir, 'figures')
 if not os.path.isdir(figures_dir):
   os.makedirs(figures_dir)
-filepath = os.path.join(figures_dir, 'forceCoefficients2k35.png')
+filepath = os.path.join(figures_dir, 'forceCoefficients3d2k35.png')
 fig.savefig(filepath, dpi=300, format='png')
