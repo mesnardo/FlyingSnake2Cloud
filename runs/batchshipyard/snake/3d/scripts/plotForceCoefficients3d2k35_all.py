@@ -107,7 +107,7 @@ print('2D <Cl> = {:.4f} ({:.2f}%)'.format(cl2d_mean, diff))
 
 # Plot forces
 pyplot.style.use('seaborn-dark')
-fig, ax = pyplot.subplots(2, figsize=(6.0, 6.0), sharex=True)
+fig, ax = pyplot.subplots(2, figsize=(6.0, 4.0), sharex=True)
 ax[0].set_ylabel('$C_D$', fontsize=16)
 ax[1].set_ylabel('$C_L$', fontsize=16)
 ax[-1].set_xlabel('non-dimensional time', fontsize=16)
@@ -139,5 +139,5 @@ fig.tight_layout()
 figures_dir = os.path.join(root_dir, 'figures')
 if not os.path.isdir(figures_dir):
   os.makedirs(figures_dir)
-filepath = os.path.join(figures_dir, 'forceCoefficients3d2k35.png')
+filepath = os.path.join(figures_dir, 'forceCoefficients3d2k35_all.png')
 fig.savefig(filepath, dpi=300, format='png')
