@@ -105,6 +105,23 @@ print('3D <Cl> = {:.4f}'.format(cl3d_mean))
 diff = (cl2d_mean - cl3d_mean) / cl3d_mean * 100.0
 print('2D <Cl> = {:.4f} ({:.2f}%)'.format(cl2d_mean, diff))
 
+# Read force coefficients from Holden et al. (2014)
+data_dir = os.path.join(os.environ['AZ_SNAKE'], 'resources', 'data')
+filepaths = {'cd': 'holden_et_al_2014_cd.csv',
+             'cl': 'holden_et_al_2014_cl.csv'}
+holden = {'cd': {}, 'cl': {}}
+for key, filepath in filepaths.items():
+  filepath = os.path.join(data_dir, filepath)
+  with open(filepath, 'r') as infile:
+    data = numpy.genfromtxt(filepath,
+                            delimiter=',', skip_header=6, usecols=(0, 1, 2))
+  for d in data:
+    for Re in (3000.0, 5000.0):
+      for angle in (30.0, 35.0, 40.0):
+        if d[0] == Re and d[1] == angle:
+          print('Holden et al. (2014) at Re={}, AoA={}deg: <{}> = {:.4f}'
+                .format(Re, angle, key, d[2]))
+
 # Plot forces
 pyplot.style.use('seaborn-dark')
 fig, ax = pyplot.subplots(2, figsize=(8.0, 4.0), sharex=True)
