@@ -100,26 +100,26 @@ ax1.set_xlim(0.0, 80.0)
 ax1.set_ylim(0.6, 1.5)
 ax1.set_xticks(numpy.arange(0.0, 80.0 + 1, 20.0))
 ax1.plot(mesh2d['times'], 2.0 * mesh2d['fx'],
-         label='2D mesh (2.9M cells)', color='grey', linewidth=1.0)
+         label='2D mesh (2.9M cells)', color='C0', linewidth=1.0)
 # Add 2D lift coefficient.
 ax3.grid()
 ax3.set_xlabel('non-dimensional time', fontname='DejaVu Serif', fontsize=12)
 ax3.set_ylabel('$C_L$', fontname='DejaVu Serif', fontsize=14)
 ax3.set_ylim(1.0, 2.8)
 ax3.plot(mesh2d['times'], 2.0 * mesh2d['fy'],
-         label='2D mesh (2.9M cells)', color='grey', linewidth=1.0)
+         label='2D mesh (2.9M cells)', color='C0', linewidth=1.0)
 # Add 3D drag coefficient.
 ax2.set_title('3D mesh (46M cells)', fontname='DejaVu Serif', fontsize=14)
 ax2.grid()
 ax2.set_xlim(100.0, 200.0)
 ax2.set_xticks(numpy.arange(100.0, 200.0 + 1, 20.0))
 ax2.plot(meshA['times'], 2.0 / spanwise_length * meshA['fx'],
-         label='3D mesh (46M cells)', color='grey', linewidth=1.0)
+         label='3D mesh (46M cells)', color='C0', linewidth=1.0)
 # Add 2D lift coefficient.
 ax4.grid()
 ax4.set_xlabel('non-dimensional time', fontname='DejaVu Serif', fontsize=12)
 ax4.plot(meshA['times'], 2.0 / spanwise_length * meshA['fy'],
-         label='3D mesh (46M cells)', color='grey', linewidth=1.0)
+         label='3D mesh (46M cells)', color='C0', linewidth=1.0)
 # Set font for axis labels.
 for ax in (ax1, ax2, ax3, ax4):
   for method in ['get_xticklabels', 'get_yticklabels']:
