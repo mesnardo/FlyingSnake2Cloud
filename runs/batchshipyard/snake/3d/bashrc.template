@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# Export directory with MPI executables to PATH.
+MPI_DIR=""
+export PATH="$MPI_DIR/bin":$PATH
+
+# Export directory with petibm-utilities executables to PATH.
+PETIBM_UTILS_DIR=""
+export PATH="$PETIBM_UTILS_DIR/bin":$PATH
