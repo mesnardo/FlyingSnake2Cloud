@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-# Export directory with MPI executables to PATH.
-MPI_DIR=""
-export PATH="$MPI_DIR/bin":$PATH
-
-# Export directory with petibm-utilities executables to PATH.
-PETIBM_UTILS_DIR=""
+# Add petibm-utilities binary executables to PATH
+PETIBM_UTILS_DIR=
 export PATH="$PETIBM_UTILS_DIR/bin":$PATH
+# Add mpi executables to PATH
+MPI_DIR=
+export PATH="$MPI_DIR/bin":$PATH
+# Add binary executables of the present repository to PATH
+AZURE_SNAKE=
+AZURE_SNAKE=$( cd $AZURE_SNAKE ; pwd -P )
+export PATH="$AZURE_SNAKE/bin":$PATH
