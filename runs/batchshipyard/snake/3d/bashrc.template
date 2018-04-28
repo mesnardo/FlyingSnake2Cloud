@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 
 # Add petibm-utilities binary executables to PATH
-PETIBM_UTILS_DIR=
+PETIBM_UTILS_DIR=""
 export PATH="$PETIBM_UTILS_DIR/bin":$PATH
 # Add mpi executables to PATH
-MPI_DIR=
-export PATH="$MPI_DIR/bin":$PATH
+PETSC_DIR=""
+PETSC_ARCH=""
+export PATH="$PETSC_DIR/$PETSC_ARCH/bin":$PATH
 # Add binary executables of the present repository to PATH
-AZURE_SNAKE=
+AZURE_SNAKE=""
 AZURE_SNAKE=$( cd $AZURE_SNAKE ; pwd -P )
 export PATH="$AZURE_SNAKE/bin":$PATH
+# Add visit to PATH
+VISIT_DIR=""
+export PATH="$VISIT_DIR/bin":$PATH
+# Export path of the Python script makemovie.py provided by VisIt
+export MAKEMOVIE_PY=""
