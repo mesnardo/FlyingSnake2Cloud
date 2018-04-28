@@ -9,7 +9,7 @@ ROOT_DIR=$(dirname $SIMU_DIR)
 source $ROOT_DIR/bashrc
 
 # Set the main directory of the data.
-DATA_DIR="$SIMU_DIR/postprocessing/convert"
+DATA_DIR=$SIMU_DIR
 # Set the output directory.
 OUT_DIR="$SIMU_DIR/postprocessing/vorticity"
 
@@ -18,9 +18,10 @@ np=4
 echo "Computing wx and wz ..."
 mpiexec -np $np petibm-vorticity3d \
 	-data_directory $DATA_DIR \
+	-binary_format \
 	-output_directory $OUT_DIR \
 	-grid_directory $DATA_DIR/grids \
-	-nstart 100000 -nend 200000 -nstep 5000 \
+	-nstart 100000 -nend 200000 -nstep 2000 \
 	-nx 1071 -ny 1072 -nz 40 \
 	-periodic_z \
 	-compute_wx -compute_wz
