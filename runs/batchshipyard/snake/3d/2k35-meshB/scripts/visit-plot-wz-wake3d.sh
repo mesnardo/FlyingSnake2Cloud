@@ -14,6 +14,6 @@ OUT_DIR="figures"
 
 visit -cli -s $ROOT_DIR/scripts/visit-plot-wz-wake3d.py \
 	--wz-xdmf-path "$DATA_DIR/postprocessing/vorticity/wz.xmf" \
-	--body-obj-path "$DATA_DIR/postprocessing/snake.obj" \
+	--body-p3d-path "$DATA_DIR/postprocessing/snake.p3d" \
 	--out-dir $OUT_DIR \
 	--out-prefix "wz_wake3d_2k35_meshB_"
