@@ -2,16 +2,17 @@
 Plots and saves a slice of the z-component of the 3D vorticity field
 at given states.
 
-CLI: visit -cli -s <script-path>
+CLI: visit -cli -nowin -s <script-path>
 """
 
+import sys
 import os
 import argparse
 
 
 # Check version of VisIt.
 script_version = '2.12.1'
-tested_versions = [script_version]
+tested_versions = [script_version, '2.12.3', '2.13.1']
 current_version = Version()
 print('VisIt version: {}\n'.format(Version()))
 if current_version not in tested_versions:
@@ -156,4 +157,4 @@ for state in range(*args.range):
 
   SaveWindow()
 
-exit(0)
+sys.exit(0)

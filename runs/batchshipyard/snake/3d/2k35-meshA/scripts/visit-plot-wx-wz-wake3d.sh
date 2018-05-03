@@ -8,11 +8,11 @@ ROOT_DIR=$(dirname $SIMU_DIR)
 
 source $ROOT_DIR/bashrc
 
-HOST="theo.seas.gwu.edu"
-DATA_DIR="$HOST:/tank/mesnardo/git/mesnardo/FlyingSnake2Cloud/runs/batchshipyard/snake/3d/2k35-meshA"
-OUT_DIR="figures"
+HOST="localhost"
+DATA_DIR="$HOST:$SIMU_DIR"
+OUT_DIR="$SIMU_DIR/figures"
 
-visit -cli -s $ROOT_DIR/scripts/visit-plot-wx-wz-wake3d.py \
+visit -cli -nowin -s $ROOT_DIR/scripts/visit-plot-wx-wz-wake3d.py \
 	--wx-xdmf-path "$DATA_DIR/postprocessing/vorticity/wx.xmf" \
 	--wz-xdmf-path "$DATA_DIR/postprocessing/vorticity/wz.xmf" \
 	--body-p3d-path "$DATA_DIR/postprocessing/snake.p3d" \

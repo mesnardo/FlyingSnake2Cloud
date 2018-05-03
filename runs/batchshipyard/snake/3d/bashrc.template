@@ -12,7 +12,8 @@ AZURE_SNAKE=""
 AZURE_SNAKE=$( cd $AZURE_SNAKE ; pwd -P )
 export PATH="$AZURE_SNAKE/bin":$PATH
 # Add visit to PATH
+VISIT_VERSION=""
 VISIT_DIR=""
 export PATH="$VISIT_DIR/bin":$PATH
 # Export path of the Python script makemovie.py provided by VisIt
-export MAKEMOVIE_PY=""
+export MAKEMOVIE_PY="$VISIT_DIR/$VISIT_VERSION/linux-x86_64/bin/makemovie.py"

@@ -8,20 +8,20 @@ SIMU_DIR=$(dirname $SCRIPT_DIR)
 source $(dirname $SIMU_DIR)/bashrc
 
 # Set the directory that contains the data.
-DATA_DIR="$SIMU_DIR/postprocessing"
+DATA_DIR="$SIMU_DIR/postprocessing/solution-crop"
 # Set the output directory.
-OUT_DIR="$SIMU_DIR/postprocessing/vorticity"
+OUT_DIR="$SIMU_DIR/postprocessing/vorticity-crop"
 
 # Set the common command-line arguments.
 common_args="
 -data_directory $DATA_DIR \
 -output_directory $OUT_DIR \
--grid_directory $SIMU_DIR/grids \
+-grid_directory $DATA_DIR/grids \
 -nstart 195200 -nend 249600 -nstep 3200 \
--nx 1704 -ny 1706 -nz 80 \
+-nx 1279 -ny 1000 -nz 80 \
 -periodic_z
 "
-np=12
+np=6
 
 # Compute the x-component of the vorticity field.
 echo "Computing wx ..."

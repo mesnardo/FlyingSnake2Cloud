@@ -18,7 +18,7 @@ np=4
 echo "Computing wx and wz ..."
 mpiexec -np $np petibm-vorticity3d \
 	-data_directory $DATA_DIR \
-	-binary_format \
+	-input_binary \
 	-output_directory $OUT_DIR \
 	-grid_directory $DATA_DIR/grids \
 	-nstart 100000 -nend 200000 -nstep 2000 \

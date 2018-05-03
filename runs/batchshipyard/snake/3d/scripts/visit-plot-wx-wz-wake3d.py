@@ -2,16 +2,18 @@
 Plots and saves the x- and z-components of the 3D vorticity field
 at given states.
 
-CLI: visit -cli -s <script-path>
+CLI: visit -cli -nowin -s <script-path>
 """
 
+import sys
 import os
 import argparse
+from visit_database_views import *
 
 
 # Check version of VisIt.
 script_version = '2.12.1'
-tested_versions = [script_version]
+tested_versions = [script_version, '2.12.3', '2.13.1']
 current_version = Version()
 print('VisIt version: {}\n'.format(Version()))
 if current_version not in tested_versions:
@@ -49,6 +51,11 @@ parser.add_argument('--range',
                     type=int,
                     default=[0, None, 1],
                     help='Range to plot (start, end, step).')
+parser.add_argument('--view-name',
+                    dest='view_name',
+                    type=str,
+                    default='domain',
+                    help='Name of the View3DAttributes to load from database.')
 parser.add_argument('--out-dir',
                     dest='out_dir',
                     type=str,
@@ -59,11 +66,10 @@ parser.add_argument('--out-prefix',
                     type=str,
                     default='wz_wx_wake3d_',
                     help='Prefix to use for output file names.')
-makemovie_path = '/usr/local/visit/2.12.1/linux-x86_64/bin/makemovie.py'
 parser.add_argument('--makemovie',
                     dest='makemovie',
                     type=str,
-                    default=makemovie_path,
+                    default=os.environ['MAKEMOVIE_PY'],
                     help='Path of the VisIt script makemovie.py.')
 args = parser.parse_args()
 
@@ -125,29 +131,16 @@ SetPlotOptions(ContourAtts)
 
 # Set attributes of the view.
 View3DAtts = View3DAttributes()
-View3DAtts.viewNormal = (-0.31, 0.41, 0.86)
-View3DAtts.focus = (0, 0, 1.6)
-View3DAtts.viewUp = (0.24, 0.91, -0.34)
-View3DAtts.viewAngle = 30
-View3DAtts.parallelScale = 21
-View3DAtts.nearPlane = -42.1555
-View3DAtts.farPlane = 42.1555
-View3DAtts.imagePan = (-0.06, -0.014)
-View3DAtts.imageZoom = 5.56
-View3DAtts.perspective = 1
-View3DAtts.eyeAngle = 2
-View3DAtts.centerOfRotationSet = 0
-View3DAtts.centerOfRotation = (0.0146802, 0, 1.6)
-View3DAtts.axis3DScaleFlag = 0
-View3DAtts.axis3DScales = (1, 1, 1)
-View3DAtts.shear = (0, 0, 1)
-View3DAtts.windowValid = 1
+set_view3d_attributes(View3DAtts, args.view_name)
 SetView3D(View3DAtts)
 
 # Remove time and user info.
 AnnotationAtts = AnnotationAttributes()
 AnnotationAtts.userInfoFlag = 0
 AnnotationAtts.timeInfoFlag = 0
+AnnotationAtts.axes3D.visible = 0
+AnnotationAtts.axes3D.triadFlag = 1
+AnnotationAtts.axes3D.bboxFlag = 0
 SetAnnotationAttributes(AnnotationAtts)
 
 DrawPlots()
@@ -182,4 +175,4 @@ for state in range(*args.range):
 
   SaveWindow()
 
-exit(0)
+sys.exit(0)
