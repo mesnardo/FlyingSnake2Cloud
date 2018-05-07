@@ -11,10 +11,6 @@ from matplotlib import pyplot
 pyplot.switch_backend('agg')
 
 
-if not os.environ.get('AZ_SNAKE'):
-  raise KeyError('Environment variable AZ_SNAKE is not set')
-
-
 def read_forces(filepath):
   with open(filepath, 'r') as infile:
     data = numpy.loadtxt(infile, dtype=numpy.float64, unpack=True)
@@ -61,7 +57,7 @@ diff = (cl2d_mean - cl3d_mean) / cl3d_mean * 100.0
 print('2D <Cl> = {:.4f} ({:.2f}%)'.format(cl2d_mean, diff))
 
 # Read force coefficients from Holden et al. (2014)
-data_dir = pathlib.Path(os.environ['AZ_SNAKE']) / 'resources/data'
+data_dir = script_dir.parents[4] / 'resources/data'
 filepaths = {'cd': data_dir / 'holden_et_al_2014_cd.csv',
              'cl': data_dir / 'holden_et_al_2014_cl.csv'}
 holden = {'cd': {}, 'cl': {}}

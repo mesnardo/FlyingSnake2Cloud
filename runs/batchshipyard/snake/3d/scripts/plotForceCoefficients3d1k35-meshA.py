@@ -5,15 +5,10 @@ Compares the 3D force coefficients with the 2D force coefficients from a
 previous simulations.
 """
 
-import os
 import pathlib
 import numpy
 from matplotlib import pyplot
 pyplot.switch_backend('agg')
-
-
-if not os.environ.get('AZ_SNAKE'):
-  raise KeyError('Environment variable AZ_SNAKE is not set')
 
 
 def read_forces(filepath):
@@ -67,20 +62,22 @@ mesh2d = read_forces(filepath)
 
 # Compute 3D mean force coefficients averaged between 150 and 200 time units.
 spanwise_length = 3.2
+t_start, t_end = 150.0, 200.0
 cd, cl, _ = get_mean_force_coefficients(meshA,
-                                        time_limits=(150.0, 200.0),
+                                        time_limits=(t_start, t_end),
                                         coeff=2.0 / spanwise_length)
 
 # Compute 2D mean force coefficients averaged between 30 and 80 time units.
+t_start_2d, t_end_2d = 30.0, 80.0
 cd_2d, cl_2d = get_mean_force_coefficients(mesh2d,
-                                           time_limits=(30.0, 80.0),
+                                           time_limits=(t_start_2d, t_end_2d),
                                            coeff=2.0)
 
 # Prints the mean force coefficients with the relative differences.
-print('- 3D:')
+print('- 3D ([{:.2f}, {:.2f}]):'.format(t_start, t_end))
 print('  + Cd = {:.4f}'.format(cd))
 print('  + Cl = {:.4f}'.format(cl))
-print('- 2D:')
+print('- 2D ([{:.2f}, {:.2f}]):'.format(t_start_2d, t_end_2d))
 print('  + Cd = {:.4f} ({:.2f}%)'.format(cd_2d, (cd_2d - cd) / cd * 100))
 print('  + Cl = {:.4f} ({:.2f}%)'.format(cl_2d, (cl_2d - cl) / cl * 100))
 
@@ -101,6 +98,10 @@ ax1.set_ylim(0.6, 1.5)
 ax1.set_xticks(numpy.arange(0.0, 80.0 + 1, 20.0))
 ax1.plot(mesh2d['times'], 2.0 * mesh2d['fx'],
          label='2D mesh (2.9M cells)', color='C0', linewidth=1.0)
+xmin, xmax = ax1.get_xlim()
+start = (t_start_2d - xmin) / (xmax - xmin)
+end = (t_end_2d - xmin) / (xmax - xmin)
+ax1.axhline(y=cd_2d, xmin=start, xmax=end, color='C1', linestyle='--')
 # Add 2D lift coefficient.
 ax3.grid()
 ax3.set_xlabel('non-dimensional time', fontname='DejaVu Serif', fontsize=12)
@@ -108,6 +109,10 @@ ax3.set_ylabel('$C_L$', fontname='DejaVu Serif', fontsize=14)
 ax3.set_ylim(1.0, 2.8)
 ax3.plot(mesh2d['times'], 2.0 * mesh2d['fy'],
          label='2D mesh (2.9M cells)', color='C0', linewidth=1.0)
+xmin, xmax = ax3.get_xlim()
+start = (t_start_2d - xmin) / (xmax - xmin)
+end = (t_end_2d - xmin) / (xmax - xmin)
+ax3.axhline(y=cl_2d, xmin=start, xmax=end, color='C1', linestyle='--')
 # Add 3D drag coefficient.
 ax2.set_title('3D mesh (46M cells)', fontname='DejaVu Serif', fontsize=14)
 ax2.grid()
@@ -115,11 +120,19 @@ ax2.set_xlim(100.0, 200.0)
 ax2.set_xticks(numpy.arange(100.0, 200.0 + 1, 20.0))
 ax2.plot(meshA['times'], 2.0 / spanwise_length * meshA['fx'],
          label='3D mesh (46M cells)', color='C0', linewidth=1.0)
+xmin, xmax = ax2.get_xlim()
+start = (t_start - xmin) / (xmax - xmin)
+end = (t_end - xmin) / (xmax - xmin)
+ax2.axhline(y=cd, xmin=start, xmax=end, color='C1', linestyle='--')
 # Add 2D lift coefficient.
 ax4.grid()
 ax4.set_xlabel('non-dimensional time', fontname='DejaVu Serif', fontsize=12)
 ax4.plot(meshA['times'], 2.0 / spanwise_length * meshA['fy'],
          label='3D mesh (46M cells)', color='C0', linewidth=1.0)
+xmin, xmax = ax4.get_xlim()
+start = (t_start - xmin) / (xmax - xmin)
+end = (t_end - xmin) / (xmax - xmin)
+ax4.axhline(y=cl, xmin=start, xmax=end, color='C1', linestyle='--')
 # Set font for axis labels.
 for ax in (ax1, ax2, ax3, ax4):
   for method in ['get_xticklabels', 'get_yticklabels']:

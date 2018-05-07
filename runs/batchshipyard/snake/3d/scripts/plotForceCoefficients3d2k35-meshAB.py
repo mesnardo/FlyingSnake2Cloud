@@ -9,10 +9,6 @@ from matplotlib import pyplot
 pyplot.switch_backend('agg')
 
 
-if not os.environ.get('AZ_SNAKE'):
-  raise KeyError('Environment variable AZ_SNAKE is not set')
-
-
 def read_forces(filepath):
   with open(filepath, 'r') as infile:
     data = numpy.loadtxt(infile, dtype=numpy.float64, unpack=True)
