@@ -16,7 +16,7 @@ OUT_DIR=$DATA_DIR
 # Set the common command-line arguments.
 common_args="
 --data-dir $DATA_DIR \
---start 5000 --end 100000 --step 5000 \
+--start 100000 --end 200000 --step 2000 \
 --dt 0.001
 "
 

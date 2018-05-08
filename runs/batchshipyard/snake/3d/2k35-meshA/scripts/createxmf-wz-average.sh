@@ -9,7 +9,7 @@ ROOT_DIR=$(dirname $SIMU_DIR)
 source $ROOT_DIR/bashrc
 
 # Set the directory that contains the data.
-DATA_DIR="$SIMU_DIR/postprocessing/vorticity-crop"
+DATA_DIR="$SIMU_DIR/postprocessing/vorticity-crop/spanwise-average"
 # Set the output directory.
 OUT_DIR=$DATA_DIR
 
@@ -20,20 +20,11 @@ common_args="
 --dt 0.001
 "
 
-# Create XMF file for the x-component of the vorticity field.
-echo "Creating XMF file for wx ..."
-snake-createxmf \
-	--grid-path $DATA_DIR/grids/wx.h5 \
-	--grid-size 690 499 39 \
-	--variables wx \
-	--output $OUT_DIR/wx.xmf \
-	$common_args
-
 # Create XMF file for the z-component of the vorticity field.
 echo "Creating XMF file for wz ..."
 snake-createxmf \
 	--grid-path $DATA_DIR/grids/wz.h5 \
-	--grid-size 689 499 40 \
+	--grid-size 689 499 \
 	--variables wz \
 	--output $OUT_DIR/wz.xmf \
 	$common_args
