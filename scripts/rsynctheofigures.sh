@@ -16,7 +16,7 @@ tmp_file="dirs.txt"
 for folder in "${folders[@]}"; do
 	echo $folder >> $tmp_file
 done
-dest_dir="$script_dir/figures-theo"
+dest_dir="$script_dir/FlyingSnake2Cloud-figures"
 mkdir -p $dest_dir
 rsync -arv -e ssh --files-from=$tmp_file $src_dir $dest_dir
 rm -f $tmp_file
