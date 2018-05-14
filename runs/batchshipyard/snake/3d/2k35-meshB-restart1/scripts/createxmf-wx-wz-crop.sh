@@ -17,7 +17,7 @@ OUT_DIR=$DATA_DIR
 common_args="
 --data-dir $DATA_DIR \
 --start 195200 --end 249600 --step 3200 \
---dt 0.0005
+--dt 0.0005 --tcorr 50.0
 "
 
 # Create XMF file for the x-component of the vorticity field.

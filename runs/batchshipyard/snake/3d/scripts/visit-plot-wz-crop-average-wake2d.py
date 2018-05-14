@@ -44,6 +44,12 @@ parser.add_argument('--range',
                     type=int,
                     default=[0, None, 1],
                     help='Range to plot (start, end, step).')
+parser.add_argument('--view',
+                    dest='view',
+                    nargs=4,
+                    type=float,
+                    default=None,
+                    help='View (x-min, x-max, y-min, y-max).')
 parser.add_argument('--out-dir',
                     dest='out_dir',
                     type=str,
@@ -69,6 +75,19 @@ if not os.path.isdir(args.out_dir):
 databases = [args.body_curve_path, args.wz_xdmf_path]
 CreateDatabaseCorrelation('common', databases[1:], 0)
 
+# Open the XMF file for the spanwise-averaged z-component of the vorticity.
+OpenDatabase(databases[1], 0)
+# Add pseudocolor of the spanwise-averaged z-component of the vorticity.
+AddPlot('Pseudocolor', 'wz', 1, 1)
+# Set attributes of the pseudocolor.
+PseudocolorAtts = PseudocolorAttributes()
+PseudocolorAtts.minFlag = 1
+PseudocolorAtts.min = -5
+PseudocolorAtts.maxFlag = 1
+PseudocolorAtts.max = 5
+PseudocolorAtts.colorTableName = 'viridis'
+SetPlotOptions(PseudocolorAtts)
+
 # Open the curve file with the coordinates of the immersed boundary.
 if databases[0]:
   OpenDatabase(databases[0], 0)
@@ -83,23 +102,22 @@ if databases[0]:
   CurveAtts.showLabels = 0
   SetPlotOptions(CurveAtts)
 
-# Open the XMF file for the spanwise-averaged z-component of the vorticity.
-OpenDatabase(databases[1], 0)
-# Add pseudocolor of the spanwise-averaged z-component of the vorticity.
-AddPlot('Pseudocolor', 'wz', 1, 1)
-# Set attributes of the pseudocolor.
-PseudocolorAtts = PseudocolorAttributes()
-PseudocolorAtts.minFlag = 1
-PseudocolorAtts.min = -5
-PseudocolorAtts.maxFlag = 1
-PseudocolorAtts.max = 5
-PseudocolorAtts.colorTableName = 'viridis'
-SetPlotOptions(PseudocolorAtts)
+if args.view:
+  # Set the 2D view.
+  View2DAtts = View2DAttributes()
+  View2DAtts.windowCoords = tuple(args.view)
+  View2DAtts.viewportCoords = (0, 1, 0, 1)
+  View2DAtts.fullFrameActivationMode = View2DAtts.Auto
+  View2DAtts.fullFrameAutoThreshold = 100
+  View2DAtts.xScale = View2DAtts.LINEAR
+  View2DAtts.yScale = View2DAtts.LINEAR
+  View2DAtts.windowValid = 1
+  SetView2D(View2DAtts)
 
 # Remove time and user info.
 AnnotationAtts = AnnotationAttributes()
 AnnotationAtts.userInfoFlag = 0
-AnnotationAtts.timeInfoFlag = 0
+AnnotationAtts.timeInfoFlag = 1
 SetAnnotationAttributes(AnnotationAtts)
 
 DrawPlots()

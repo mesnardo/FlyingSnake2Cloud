@@ -45,6 +45,9 @@ parser.add_argument('--step',
 parser.add_argument('--dt',
                     dest='dt', type=float, required=True,
                     help='Time increment.')
+parser.add_argument('--tcorr',
+                    dest='tcorr', type=float, default=0.0,
+                    help='Time correction to apply.')
 parser.add_argument('--output', '-o',
                     dest='output', type=str,
                     default=pathlib.Path() / 'var.xmf',
@@ -79,7 +82,7 @@ precision = '8'
 
 # Create an XMF block for each time-step saved
 states = [i for i in range(args.start, args.end + 1, args.step)]
-times = [state * args.dt for state in states]
+times = [state * args.dt + args.tcorr for state in states]
 for state, time in zip(states, times):
   grid = etree.SubElement(grid_time_series, 'Grid',
                           Name='Grid',
